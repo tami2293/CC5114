@@ -53,8 +53,7 @@ de las cuales se extrajo un 20% para el conjunto de testing. Cabe mencionar que
 en la separación de datos no se equiparó la cantidad de las dos output labels, lo
 que hubiese podido variar la performance de la red. Quedó pendiente evaluar esto.
 
-En general, el rendimiento de la red se considera buena. Para esto sólo se tomó 
-en cuenta el error, pero no el accuracy. Sin embargo al imprimir la matriz de
+En general, el rendimiento de la red se considera buena. Además, al imprimir la matriz de
 confusión luego de la predicción, alrededor del 80% de los datos fueron
 correctamente predichos. A continuación se adjunta la matriz de confusión,
 la tasa de error por época y el accuracy por época:
