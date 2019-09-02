@@ -56,13 +56,15 @@ que hubiese podido variar la performance de la red. Quedó pendiente evaluar est
 En general, el rendimiento de la red se considera buena. Para esto sólo se tomó 
 en cuenta el error, pero no el accuracy. Sin embargo al imprimir la matriz de
 confusión luego de la predicción, alrededor del 80% de los datos fueron
-correctamente predichos. A continuación se adjunta la matriz de confusión y 
-la tasa de error por época:
+correctamente predichos. A continuación se adjunta la matriz de confusión,
+la tasa de error por época y el accuracy por época:
 
 [[6219 526]\
  [1278 1022]]
 
  ![](error.png)
+ 
+ ![](acc.png)
  El output corresponde a una sola clase, pero al procesarla con 1-hot encoding corresponde
  a dos labels.
  En un principio, la predicción fue hecha en base a un threshold que clasificaba 

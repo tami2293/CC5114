@@ -1,5 +1,6 @@
 from read_data import *
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
 import time
 import matplotlib.pyplot as plt
 
@@ -59,6 +60,19 @@ def calculate_cost(A2, Y):
   # m is the number of examples
   cost = np.sum((0.5 * (A2 - Y) ** 2).mean(axis=1))/m
   return cost
+
+
+#Evaluate accuracy between the prediction made in A2 and the provided labels Y
+def calculate_accuracy(a2, Y):
+  a2_final = np.zeros((a2.shape[0], a2.shape[1]))
+  max_i = np.argmax(a2, axis=0)
+  i_acc = 0
+  for index in max_i:
+    a2_final[index][i_acc] = 1
+    i_acc += 1
+  a2_final = a2_final.astype(int)
+  return np.count_nonzero((a2_final == Y).all(0))/Y.shape[1]
+
 
 # Apply the backpropagation
 def backward_prop(X, Y, cache, parameters):
@@ -120,16 +134,21 @@ def update_parameters(parameters, grads, learning_rate):
 def model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate):
   parameters = initialize_parameters(n_x, n_h, n_y)
   cost_list = []
+  acc_list = []
   for i in range(0, num_of_iters+1):
     a2, cache = forward_prop(X, parameters)
     cost = calculate_cost(a2, Y)
+    acc = calculate_accuracy(a2, Y)
     grads = backward_prop(X, Y, cache, parameters)
     parameters = update_parameters(parameters, grads, learning_rate)
     if(i%100 == 0):
       print('Cost after iteration# {:d}: {:f}'.format(i, cost))
+      print('Accuracy after iteration# {:d}: {:f}'.format(i, acc))
       cost_list.append(cost)
+      acc_list.append(acc)
 
-  return parameters, cost_list
+  return parameters, cost_list, acc_list
+
 
 # Make a prediction
 # X: represents the inputs
@@ -173,6 +192,7 @@ total_model = model(X_train, y_train, n_x, n_h, n_y, num_of_iters, learning_rate
 elapsed_time = time.time() - start_time
 trained_parameters = total_model[0]
 cost_l = total_model[1]
+acc_l = total_model[2]
 
 # Test to calculate the result of its elements. Measure elapsed time.
 y_predict = predict(X_test, trained_parameters)
@@ -198,12 +218,22 @@ epoch_n = 0
 for ind in range(0, len(cost_l)):
     epoch.append(epoch_n)
     epoch_n += 100
+
+plt.figure()
 plt.plot(epoch, cost_l)
 plt.title('Error per epoch')
 plt.xlabel('Epoch number')
 plt.ylabel('Error rate')
 plt.savefig('error.png')
-plt.show()
+
+plt.figure()
+plt.plot(epoch, acc_l)
+plt.title("Accuracy per epoch")
+plt.xlabel('Epoch number')
+plt.ylabel('Accuracy')
+plt.savefig('acc.png')
+
+
 
 # Print the result
 print(y_predict)
