@@ -44,5 +44,4 @@ cbar = fig.colorbar(im)
 
 ax.set_title("Number of iterations to find a solution")
 fig.tight_layout()
-plt.show()
 plt.savefig('Genetic Algorithms Problems/hotmap.png')
