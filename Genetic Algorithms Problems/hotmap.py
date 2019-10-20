@@ -1,6 +1,7 @@
 from ga_machine import *
 import numpy
 import matplotlib.pyplot as plt
+import os
 
 # UNBOUND KNAPSACK
 
@@ -10,10 +11,10 @@ mut_rate = numpy.arange(0, 1, .1)
 iterations = numpy.empty([population.size, mut_rate.size])
 for ind_pop in range(population.size):
     for ind_rate in range(mut_rate.size):
-        GA3 = GA(pop_size=population[ind_pop], mutation_rate=mut_rate[ind_rate], fit=fitness3,
-                 gene_factory=gene_factory3,indiv_factory=individual_factory3,
+        GA3 = GA(pop_size=population[ind_pop], mutation_rate=mut_rate[ind_rate], fit=knap_fitness,
+                 gene_factory=knap_gene_factory,indiv_factory=knap_individual_factory,
                  termination_condition=lambda l: False if (not l or (l[-1] < OPT_FITNESS and len(l) < 100)) else True,
-                 number_of_genes=NUMBER_OF_GENES3, is_crossover=True)
+                 number_of_genes=KNAP_NUMBER_OF_GENES, is_crossover=True)
         individuals, fits = GA3.run()
         iterate = GA3.generations()
         iterations[ind_pop, ind_rate] = iterate
@@ -44,3 +45,4 @@ cbar = fig.colorbar(im)
 ax.set_title("Number of iterations to find a solution")
 fig.tight_layout()
 plt.show()
+plt.savefig('Genetic Algorithms Problems/hotmap.png')
