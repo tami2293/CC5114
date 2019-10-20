@@ -1,63 +1,60 @@
 import random
 import string
-import math
 from statistics import mean
-import matplotlib.pyplot as plt
 
 # BINARY NUMBER PROBLEM
-NUMBER_OF_GENES = 10
+BIN_NUMBER_OF_GENES = 10
 BINARY_NUMBER = "0001100100"
 
 
-def fitness(indi):
+def bin_fitness(indi):
     score = 0
-    for i in range(0, NUMBER_OF_GENES):
+    for i in range(BIN_NUMBER_OF_GENES):
         if str(indi[i]) == BINARY_NUMBER[i]:
             score += 1
     return score
 
 
-def gene_factory():
+def bin_gene_factory():
     rand_value = random.randrange(0, 2)
     return rand_value
 
 
-def individual_factory():
-    return [gene_factory() for i in range(NUMBER_OF_GENES)]
+def bin_individual_factory():
+    return [bin_gene_factory() for i in range(BIN_NUMBER_OF_GENES)]
 
 
 # FINDING A WORD PROBLEM
-NUMBER_OF_GENES2 = 10
+WORD_NUMBER_OF_GENES = 10
 WORD = "holaholaen"
 
 
-def fitness2(indi):
+def word_fitness(indi):
     score = 0
-    for i in range(0, NUMBER_OF_GENES2):
+    for i in range(WORD_NUMBER_OF_GENES):
         if str(indi[i]) == WORD[i]:
             score += 1
     return score
 
 
-def gene_factory2():
-    rand_value = random.choice(string.ascii_letters.lower())
-    return rand_value
+def word_gene_factory():
+    return random.choice(string.ascii_letters.lower())
 
 
-def individual_factory2():
-    return [gene_factory2() for i in range(NUMBER_OF_GENES2)]
+def word_individual_factory():
+    return [word_gene_factory() for i in range(WORD_NUMBER_OF_GENES)]
 
 
 # UNBOUND-KNAPSACK
-NUMBER_OF_GENES3 = 15
+KNAP_NUMBER_OF_GENES = 15
 OPT_FITNESS = 36
 SOLUTION = [(4, 10), (4, 10), (4, 10), (1, 2), (1, 2), (1, 2), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)]
 
 
-def fitness3(indi):
+def knap_fitness(indi):
     score = 0
     weight = 0
-    for i in range(NUMBER_OF_GENES3):
+    for i in range(KNAP_NUMBER_OF_GENES):
         weight += indi[i][0]
         score += indi[i][1]
     penalty = weight - 15
@@ -66,49 +63,13 @@ def fitness3(indi):
     return score
 
 
-def gene_factory3():
+def knap_gene_factory():
     weight, value = random.choice([(1, 1), (1, 2), (2, 2), (4, 10), (12, 4), (0, 0)])
     return weight, value
 
 
-def individual_factory3():
-    return [gene_factory3() for i in range(NUMBER_OF_GENES3)]
-
-
-# 0-1-KNAPSACK
-NUMBER_OF_GENES4 = 5
-SOLUTION = [(4, 10), (1, 1), (1, 2), (2, 2), (0, 0)]
-
-def fitness4(indi):
-    score = 0
-    weight = 0
-    for i in range(NUMBER_OF_GENES4):
-        weight += indi[i][0]
-        if len(indi) != len(set(indi)):
-            score = 0  # aquí debería ser muy muy negativo
-            break
-        score += indi[i][1]
-    penalty = weight - 15
-    if penalty > 0:
-        penalty *= 100
-    return score - penalty
-
-
-def gene_factory4():
-    weight = random.choice([1, 2, 4, 12])
-    if weight == 1:
-        value = random.choice([1, 2])
-    elif weight == 2:
-        value = 2
-    elif weight == 4:
-        value = 10
-    else:
-        value = 4
-    return weight, value
-
-
-def individual_factory4():
-    return [gene_factory4() for i in range(NUMBER_OF_GENES4)]
+def knap_individual_factory():
+    return [knap_gene_factory() for i in range(KNAP_NUMBER_OF_GENES)]
 
 
 class GA(object):
@@ -143,7 +104,7 @@ class GA(object):
     def select(self):
         # Maximizes fitness function
         winner = None
-        for i in range(0, 5):
+        for i in range(5):
             an_individual = random.choice(self.population)
             if winner is None or self.fitness(an_individual) > self.fitness(winner):
                 winner = an_individual
@@ -151,11 +112,7 @@ class GA(object):
 
     def crossover(self, individual_1, individual_2):
         index = random.randrange(0, self.genes_number)
-        new_individual = []
-        for i in range(0, index):
-            new_individual.append(individual_1[i])
-        for i in range(index, self.genes_number):
-            new_individual.append(individual_2[i])
+        new_individual = individual_1[0:index] + individual_2[index::]
         return new_individual
 
     def mutation(self, individual_1):
@@ -170,9 +127,8 @@ class GA(object):
         return new_individual
 
     def run(self):
-        # for i in range(0, self.max_iter):
         i = 0
-        while not self.termination_condition(self.best_fitness):
+        while not self.termination_condition(self.best_fitness):  # must change parameters if it's necessary
             new_population = []
             if self.reproduce_crossover:
                 for j in range(0, self.pop_size):
@@ -193,7 +149,6 @@ class GA(object):
             self.best_fitness.append(max(self.fits_list))
             self.worst_fitness.append(min(self.fits_list))
             self.average_fitness.append(mean(self.fits_list))
-            print(self.best_fitness[-1])  # this is useful to determine whether the perfect score (fitness) was reached
             i += 1
         return self.population, self.fits_list
 
@@ -212,26 +167,23 @@ class GA(object):
 # BINARY NUMBER
 
 
-#GA = GA(pop_size=20, mutation_rate=0, fit=fitness, gene_factory=gene_factory, indiv_factory=individual_factory,
-#        termination_condition=0, max_iter=200, genes_number=NUMBER_OF_GENES, is_crossover=True)
+#GA = GA(pop_size=20, mutation_rate=0, fit=bin_fitness, gene_factory=bin_gene_factory, indiv_factory=bin_individual_factory,
+#        termination_condition=lambda i: i == 20, number_of_genes=BIN_NUMBER_OF_GENES, is_crossover=True)
 #pop, list_fitness = GA.run()
 
 
 # FINDING A WORD
 
 
-#GA2 = GA(pop_size=150, mutation_rate=0, fit=fitness2, gene_factory=gene_factory2, indiv_factory=individual_factory2,
-# termination_condition=0, max_iter=2500, genes_number=NUMBER_OF_GENES2, is_crossover=True)
+#GA2 = GA(pop_size=300, mutation_rate=0, fit=word_fitness, gene_factory=word_gene_factory, indiv_factory=word_individual_factory,
+#               termination_condition=lambda i: i == 50, number_of_genes=WORD_NUMBER_OF_GENES, is_crossover=True)
 #pop, list_fitness = GA2.run()
+
+# PRINT RESULTS
+
 #for ind in pop:
 #    print(ind)
 #for fit in list_fitness:
 #    print(fit)
-
-
-
-
-
-# 0-1-KNAPSACK
 
 
