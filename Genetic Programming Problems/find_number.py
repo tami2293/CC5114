@@ -10,7 +10,7 @@ NUMBER = 65346
 
 def fitness_1(individual):
     # Must evaluate the tree (individual) and check its value
-    value = individual.eval()
+    value = individual.eval({25: 25, 100: 100, 4: 4, 8: 8, 7: 7, 2: 2})
     # The fitness value will be the distance between the result and the number to find
     score = abs(NUMBER - value)
     return score

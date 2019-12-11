@@ -10,7 +10,7 @@ NUMBER = 65346
 
 def fitness_3(individual):
     # Must evaluate the tree (individual) and check its value
-    value = individual.eval()
+    value = individual.eval({25: 25, 100: 100, 4: 4, 8: 8, 7: 7, 2: 2})
 
     # Count number of repetitions for terminal nodes
     serialized = individual.serialize()
@@ -21,6 +21,7 @@ def fitness_3(individual):
             terminal_nodes.append(elem)
             dup_count = {i: terminal_nodes.count(i) for i in terminal_nodes}
             dup_error = (sum(dup_count.values()) - len(dup_count)) / len(terminal_nodes)
+
     # The fitness value will be the same as before with an error related to the expression size and number repetitions
     # score = abs(NUMBER - value) * (1 + individual.get_size() / 50000.0)
     score = abs(NUMBER - value) + individual.get_size() / 10000.0 + dup_error
@@ -68,7 +69,7 @@ plt.savefig('average_fitness_3.png')
 # No es necesario imprimir lo de abajo (sugerencia: eliminarlo)
 for individual in pop:
     print(individual.__repr__())
-    print(individual.eval())
+    print(individual.eval({25: 25, 100: 100, 4: 4, 8: 8, 7: 7, 2: 2}))
 print(" ")
 for fit in list_fitness:
     print(fit)

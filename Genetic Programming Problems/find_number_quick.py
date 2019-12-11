@@ -10,7 +10,7 @@ NUMBER = 65346
 
 def fitness_2(individual):
     # Must evaluate the tree (individual) and check its value
-    value = individual.eval()
+    value = individual.eval({25: 25, 100: 100, 4: 4, 8: 8, 7: 7, 2: 2})
     # The fitness value will be the same as before with an error related to the expression size
     # score = abs(NUMBER - value) * (1 + individual.get_size() / 50000.0)
     score = abs(NUMBER - value) + individual.get_size() / 10000.0
