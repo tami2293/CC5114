@@ -26,7 +26,7 @@ class Node:
         self.size = 0
         
     # funcion para evaluar un nodo (calcular el resultado)
-    def eval(self):
+    def eval(self, dic):
         # es importante chequear que los argumentos que nos dieron
         # coincidan con los argumentos que necesitamos
         assert len(self.arguments) == self.num_arguments
@@ -39,7 +39,7 @@ class Node:
         # esto se llama `unpacking`.
         # lo necesitamos porque nuestra funcion recibe N argumentos
         # no una lista de tamaño N.
-        return self.operation(*[node.eval() for node in self.arguments])
+        return self.operation(*[node.eval(dic) for node in self.arguments])
     
     # hace una lista con todos los hijos
     def serialize(self):
@@ -140,6 +140,7 @@ class TerminalNode(Node):
     def __repr__(self):
         return str(self.value)
     
-    def eval(self):
+    def eval(self, dic):
         # la evaluacion de un nodo terminal es el valor que contiene
-        return self.value
+        return dic[self.value]
+
