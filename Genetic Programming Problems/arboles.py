@@ -124,7 +124,17 @@ class MultNode(BinaryNode):
         
     def __repr__(self):
         return "({} * {})".format(*self.arguments)
-    
+
+
+class DivNode(BinaryNode):
+    def __init__(self, left, right):
+        def _div(x,y):
+            return x / y
+        super(DivNode, self).__init__(_div, left, right)
+
+    def __repr__(self):
+        return "({} / {})".format(*self.arguments)
+
     
 class TerminalNode(Node):
     # Este nodo representa una hoja de arbol. Es el nodo terminal
