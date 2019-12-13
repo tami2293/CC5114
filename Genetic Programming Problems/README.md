@@ -166,3 +166,9 @@ al interior del código.**
 Figura 28: Heatmap de configuraciones |
 :-------------------------:|
 ![](hotmap.png) |
+
+Se puede observar claramente una correlación del número de individuos y la tasa de mutación con
+la cantidad de iteraciones necesarias para encontrar una solución óptima. En este caso se considera
+que la solución óptima es encontrada cuando el fitness es menor a 1. Para esto se tomó en cuenta
+la ecuación, cuyo resultado siempre es un entero si sus terminales lo son. El error decimal se 
+atribuye al castigo por el tamaño del árbol.
