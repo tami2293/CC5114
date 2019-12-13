@@ -6,24 +6,24 @@ from abstract_syntax_tree import *
 import sys
 import inspect
 
+
 class GP(object):
-    def __init__(self, pop_size, mutation_rate, fit, gene_factory, indiv_factory, termination_condition,
-                 number_of_genes, is_crossover):
+    def __init__(self, pop_size, mutation_rate, fit, indiv_factory, termination_condition, is_crossover):
         self.pop_size = pop_size
         print("Creating individuals...")
         self.mutation_rate = mutation_rate
         self.fitness = fit
         self.fits_list = []  # Results list of each individual
         self.individual_factory = indiv_factory
-        self.gene_factory = gene_factory
         self.termination_condition = termination_condition
-        self.genes_number = number_of_genes
         self.reproduce_crossover = is_crossover  # determines reproduction type
         self.best_fitness = []  # best fitness for each generation
         self.worst_fitness = []  # worst fitness for each generation
         self.average_fitness = []  # average fitness for each generation
 
         self.max_size = []
+
+        print(self.reproduce_crossover)
 
         #  Initializes population generally randomly
         population = []
@@ -38,7 +38,7 @@ class GP(object):
         return a_fits_list
 
     def select_max(self):
-        # Maximizes fitness function
+        # Maximizes fitness function: takes random individuals and chooses the one with the max. value
         winner = None
         for i in range(5):
             an_individual = random.choice(self.population)
@@ -47,7 +47,7 @@ class GP(object):
         return winner
 
     def select_min(self):
-        # Minimizes fitness function
+        # Minimizes fitness function: takes random individuals and chooses the one with the min. value
         winner = None
         for i in range(5):
             an_individual = random.choice(self.population)
@@ -56,55 +56,47 @@ class GP(object):
         return winner
 
     def crossover(self, individual_1, individual_2):
-        print("INDIVIDUAL_1 SIZE")
         a_size = individual_1.get_size()
-        print(a_size)
         self.max_size.append(a_size)
-        print("MAX SIZE")
-        print(max(self.max_size))
         new_individual = individual_1.copy()  # First parent copy
 
-        # Pick random first parent child
+        # Pick random first parent node
         child_list_1 = new_individual.serialize()
         random_index_1 = random.randrange(0, len(child_list_1))
         to_replace = child_list_1[random_index_1]
 
-        # Pick random second parent child
+        # Pick random second parent node
         child_list_2 = individual_2.serialize()
         random_index_2 = random.randrange(0, len(child_list_2))
         replacement = child_list_2[random_index_2].copy()
-        print("REPLACEMENT SIZE")
-        b_size = child_list_2[random_index_2].get_size()
-        print(b_size)
-
 
         # Replace first parent child picked by second parent child picked
         to_replace.replace(replacement)
 
-        a_list = new_individual.serialize()
-        for elem in a_list:
-            if isinstance(elem, TerminalNode):
-                print(elem)
         return new_individual
-
-        #index = random.randrange(0, self.genes_number)
-        #new_individual = individual_1[0:index] + individual_2[index::]
-        #return new_individual
 
     def mutation(self, individual_1):
-        new_individual = individual_1
         if random.random() <= self.mutation_rate:
-            indexes_list = list(range(self.genes_number))
-            mutation_number = int(self.genes_number * self.mutation_rate)
-            chosen_indexes = random.sample(indexes_list, mutation_number)
-            for index in chosen_indexes:
-                new_gene = self.gene_factory()
-                new_individual[index] = new_gene
-        return new_individual
+            new_individual = individual_1.copy()
+
+            # Pick random first parent node
+            child_list_1 = new_individual.serialize()
+            random_index_1 = random.randrange(0, len(child_list_1))
+            to_replace = child_list_1[random_index_1]
+
+            # Create random individual
+            random_node = self.individual_factory()
+
+            # Replace first individual node picked by random generated node
+            to_replace.replace(random_node)
+
+            return new_individual
+
+        return individual_1
 
     def run(self):
         i = 0
-        while not self.termination_condition(i):  # must change parameters if it's necessary
+        while not self.termination_condition(i):  # must change parameters if it's necessary (self.best_fitness)
             new_population = []
             if self.reproduce_crossover:
                 for j in range(0, self.pop_size):

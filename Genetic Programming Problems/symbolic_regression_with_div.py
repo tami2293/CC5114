@@ -6,11 +6,11 @@ import time
 import numexpr
 import sys
 
-# FIND A FUNCTION
+# FIND A FUNCTION (DIVISION INCLUDED)
 FUNCTION = "x * x + x - 6"
 
 
-def fitness_4(individual):
+def fitness_5(individual):
     dic = {}
     for terminalNum in range(-10, 11):
         dic.update({terminalNum: terminalNum})
@@ -25,15 +25,13 @@ def fitness_4(individual):
         except ZeroDivisionError:
             score = sys.maxsize
             return score
-        #score += abs(eq_result - value)
         score += (eq_result - value)**2
     # The total score will be the MSE plus a proportion attached to the size of the individual
-    #score += individual.get_size() / 10000.0
     score = score/float(len(list(points_range))) + individual.get_size() / 10000.0
     return score
 
 
-def individual_factory_4():
+def individual_factory_5():
     terminalArr = []
     for terminalNum in range(-10, 11):
         terminalArr.append(terminalNum)
@@ -43,42 +41,41 @@ def individual_factory_4():
     individual = AST_generator.__call__()
     return individual
 
+GP_5 = GP(pop_size=500, mutation_rate=0, fit=fitness_5, indiv_factory=individual_factory_5, termination_condition=lambda i: i == 40, is_crossover=True)
 
-GP_4 = GP(pop_size=500, mutation_rate=0, fit=fitness_4, gene_factory=0, indiv_factory=individual_factory_4, termination_condition=lambda i: i == 40, number_of_genes=0, is_crossover=True)
-
-ini = time.time()
+# ini = time.time()
 try:
-    pop, list_fitness = GP_4.run()
+    pop, list_fitness = GP_5.run()
 except ZeroDivisionError:
     pass
-end = time.time()
-print("Time elapsed ")
-print(end - ini)
+# end = time.time()
+# print("Time elapsed ")
+# print(end - ini)
 
 # Plot best, worst and average fitness per epoch
 plt.figure()
-epochs = list(range(1, GP_4.generations() + 1))
-plt.plot(epochs, GP_4.get_best_fitness())
+epochs = list(range(1, GP_5.generations() + 1))
+plt.plot(epochs, GP_5.get_best_fitness())
 plt.title('Best Fitness per Epoch')
 plt.xlabel('Epoch number')
 plt.ylabel('Fitness')
-plt.savefig('best_fitness_4.png')
+plt.savefig('best_fitness_5.png')
 
 plt.figure()
 #plt.ylim(top=5*10**9)
-plt.plot(epochs, GP_4.get_worst_fitness())
+plt.plot(epochs, GP_5.get_worst_fitness())
 plt.title('Worst Fitness per Epoch')
 plt.xlabel('Epoch number')
 plt.ylabel('Fitness')
-plt.savefig('worst_fitness_4.png')
+plt.savefig('worst_fitness_5.png')
 
 plt.figure()
 #plt.ylim(10**14)
-plt.plot(epochs, GP_4.get_average_fitness())
+plt.plot(epochs, GP_5.get_average_fitness())
 plt.title('Average Fitness per Epoch')
 plt.xlabel('Epoch number')
 plt.ylabel('Fitness')
-plt.savefig('average_fitness_4.png')
+plt.savefig('average_fitness_5.png')
 
 # No es necesario imprimir lo de abajo (sugerencia: eliminarlo)
 for individual in pop:
@@ -87,5 +84,51 @@ print(" ")
 for fit in list_fitness:
     print(fit)
 print(" ")
-for fitness_per_gener in GP_4.get_best_fitness():
+for fitness_per_gener in GP_5.get_best_fitness():
+    print(fitness_per_gener)
+
+GP_5 = GP(pop_size=500, mutation_rate=0.5, fit=fitness_5, indiv_factory=individual_factory_5, termination_condition=lambda i: i == 40, is_crossover=False)
+
+# ini = time.time()
+try:
+    pop, list_fitness = GP_5.run()
+except ZeroDivisionError:
+    pass
+# end = time.time()
+# print("Time elapsed ")
+# print(end - ini)
+
+# Plot best, worst and average fitness per epoch
+plt.figure()
+epochs = list(range(1, GP_5.generations() + 1))
+plt.plot(epochs, GP_5.get_best_fitness())
+plt.title('Best Fitness per Epoch')
+plt.xlabel('Epoch number')
+plt.ylabel('Fitness')
+plt.savefig('best_fitness_5_mut.png')
+
+plt.figure()
+#plt.ylim(top=5*10**9)
+plt.plot(epochs, GP_5.get_worst_fitness())
+plt.title('Worst Fitness per Epoch')
+plt.xlabel('Epoch number')
+plt.ylabel('Fitness')
+plt.savefig('worst_fitness_5_mut.png')
+
+plt.figure()
+#plt.ylim(10**14)
+plt.plot(epochs, GP_5.get_average_fitness())
+plt.title('Average Fitness per Epoch')
+plt.xlabel('Epoch number')
+plt.ylabel('Fitness')
+plt.savefig('average_fitness_5_mut.png')
+
+# No es necesario imprimir lo de abajo (sugerencia: eliminarlo)
+for individual in pop:
+    print(individual.__repr__())
+print(" ")
+for fit in list_fitness:
+    print(fit)
+print(" ")
+for fitness_per_gener in GP_5.get_best_fitness():
     print(fitness_per_gener)
