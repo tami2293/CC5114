@@ -12,7 +12,7 @@ la implementación sigue las sugerencias del enunciado.
 #### Sin límite de repeticiones
 El código de este ejercicio se encuentra en el archivo *find_number.py*, donde además se generan los
 gráficos de curvas de evolución de fitness (mejor, promedio y peor) para crossover 
-(*best_fitness_1.png*, *average_fitness_1.png* y *worst_fitness_1.png* respectivamente) y mutación.
+(*best_fitness_1.png*, *average_fitness_1.png* y *worst_fitness_1.png* respectivamente).
 Los gráficos para la mutación no pudieron ser generados, ya que el código para crearlos se incluyó
 posteriormente y luego de numerosos intentos el programa no lograba terminar su ejecución por tope
 de memoria. 
@@ -20,7 +20,8 @@ de memoria.
 La tasa de mutación y población utilizados para este y los ejercicios que continuan es de 0.5 y 
 500 individuos respectivamente.
 
-Luego de alguna pruebas se consideró que el número de iteraciones indicado para este ejercicio es de 50.
+Luego de alguna pruebas se consideró que un número de iteraciones adecuado para este ejercicio puede
+ser de 50.
 
 Figura 1                           |  Figura 2                      
 :-------------------------:|:-------------------------:
@@ -40,7 +41,8 @@ valor razonable. Para medir los tamaños de los árboles se agregó el método *
 archivo *arboles.py*. El archivo para correr el programa y generar los gráficos de la misma forma que en
 la sección anterior y las que vienen a continuación se llama *find_number_quick.py*.
 
-Adjuntando los gráficos de las curvas de evolución de fitness utilizando crossover:
+Adjuntando los gráficos de las curvas de evolución de fitness utilizando crossover (*best_fitness_2.png*, 
+*average_fitness_2.png* y *worst_fitness_2.png*):
 
 Figura 4                           |  Figura 5                      
 :-------------------------:|:-------------------------:
@@ -50,7 +52,8 @@ Figura 6 |
 :-------------------------:|
 ![](average_fitness_2.png) |
 
-Adjuntando los gráficos de las curvas de evolución de fitness utilizando mutación:
+Adjuntando los gráficos de las curvas de evolución de fitness utilizando mutación (*best_fitness_2_mut.png*, 
+*average_fitness_2_mut.png* y *worst_fitness_2_mut.png*):
 
 Figura 7                           |  Figura 8                      
 :-------------------------:|:-------------------------:
@@ -60,11 +63,21 @@ Figura 9 |
 :-------------------------:|
 ![](average_fitness_2_mut.png) |
 
+Es posible observar diferencias en el comportamiento del algoritmo usando crossover y mutación. Para el
+primero, hay una disminución clara y más uniforme del peor fitness y el fitness promedio encontrado en 
+cada iteración. Para el segundo, en cambio, se observa sólo un peak importante. Esto puede atribuirse
+a una aleatoridad mayor de la mutación en comparación al crossver, la cual puede explicarse porque en el
+crossover se eligen dos padres de la generación anterior y en la mutación sólo se elige un individuo de la
+generación anterior reemplazando una parte de él con un árbol totalmente aleatorio. Sin embargo, esta 
+aleatoridad también puede depender de parámetros como la tasa de mutación, que en este caso fue lo
+suficientemente alta (0.5) como para renovar varias veces los individuos.
+
 #### Sin repetición
 Para evitar la repetición de números se modificó la función de fitness anterior, agregando un error basado
 en la cantidad de duplicaciones. El archivo con la implementación y generación de gráficos, al igual que en
 los ejercicios anteriores, se llama *find_number_without_reps.py*. A continuación se adjuntan los
-resultados con crossover y mutación, en ese orden.
+resultados con crossover (*best_fitness_3.png*, *average_fitness_3.png* y *worst_fitness_3.png*) 
+y mutación (*best_fitness_3_mut.png*, *average_fitness_3_mut.png* y *worst_fitness_3_mut.png*), en ese orden.
 
 Figura 10                           |  Figura 11                      
 :-------------------------:|:-------------------------:
@@ -95,7 +108,9 @@ añadieron números.
 ### Symbolic Regression
 El archivo donde se encuentra el código del ejercicio se llama *symbolic_regression.py*. Aquí se
 consideró que 40 era un número de iteraciones lo suficientemente alto como para lograr encontrar
-una solución. Las curvas de evolución de fitness para crossover y mutación se adjuntan a continuación en
+una solución. Las curvas de evolución de fitness para crossover (*best_fitness_4.png*, 
+*average_fitness_4.png* y *worst_fitness_4.png*) y mutación (*best_fitness_4_mut.png*, 
+*average_fitness_4_mut.png* y *worst_fitness_4_mut.png*) se adjuntan a continuación en
 el orden mencionado.
 
 Figura 16                           |  Figura 17                      
@@ -114,6 +129,9 @@ Figura 21 |
 :-------------------------:|
 ![](average_fitness_4_mut.png) |
 
+En este ejercicio, al igual que en el de encontrar un número con la función de fitness mejorada, se observa
+una disminución más uniforme de la función en el gráfico de fitness promedio.
+
 ### Implementación del nodo División
 #### División por cero
 Para evitar dividir por cero, en primer lugar se capturó la excepción *ZeroDivisionError* al correr 
@@ -128,7 +146,9 @@ tipo de árboles requerían considerarse inválidos.
 
 El número de iteraciones se mantuvo igual al ejercicio anterior (symbolic regression sin división).
 
-Los resultados de las curvas de fitness para crossover y mutación son los siguientes:
+Los resultados de las curvas de fitness para crossover (*best_fitness_5.png*, *average_fitness_5.png* y 
+*worst_fitness_5.png*) y mutación (*best_fitness_5_mut.png*, *average_fitness_5_mut.png* y 
+*worst_fitness_5_mut.png*) son los siguientes:
 
 Figura 22                           |  Figura 23                      
 :-------------------------:|:-------------------------:
